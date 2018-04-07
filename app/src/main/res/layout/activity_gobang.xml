@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/bk"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/ivMyPic"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/btn_player"
+        app:layout_constraintBottom_toTopOf="@+id/chessBoard"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvUserId"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:text="icelee"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="@+id/ivMyPic"
+        app:layout_constraintLeft_toRightOf="@id/ivMyPic"
+        app:layout_constraintTop_toTopOf="@+id/ivMyPic" />
+
+    <TextView
+        android:id="@+id/tvRoomTip"
+        app:layout_constraintRight_toLeftOf="@id/tvRoom"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/chessBoard"
+        android:text="房间号："
+        app:layout_constraintHorizontal_chainStyle="packed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tvRoom"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/tvRoomTip"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/chessBoard"
+        android:text="2020"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+
+    <TextView
+        android:gravity="center"
+        android:textColor="#000"
+        android:visibility="invisible"
+        android:id="@+id/tvMyTime"
+        android:layout_width="41dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:background="#fff"
+        android:text="00:30"
+        app:layout_constraintBottom_toTopOf="@+id/ivMyChess"
+        app:layout_constraintStart_toEndOf="@+id/tvUserId"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <ImageView
+        android:visibility="invisible"
+        android:id="@+id/ivMyChess"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/white_chess_2"
+        app:layout_constraintBottom_toTopOf="@+id/chessBoard"
+        app:layout_constraintEnd_toEndOf="@+id/tvMyTime"
+        app:layout_constraintStart_toStartOf="@+id/tvMyTime" />
+
+    <TextView
+        android:gravity="center"
+        android:textColor="#000"
+        android:id="@+id/tvFriendTime"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:background="#fff"
+        android:visibility="invisible"
+        android:text="00:30"
+        app:layout_constraintBottom_toTopOf="@+id/ivFriendChess"
+        app:layout_constraintStart_toEndOf="@+id/tvMyTime"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <ImageView
+        android:visibility="invisible"
+        android:id="@+id/ivFriendChess"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/black_chess_2"
+        app:layout_constraintBottom_toTopOf="@+id/chessBoard"
+        app:layout_constraintEnd_toEndOf="@+id/tvFriendTime"
+        app:layout_constraintStart_toStartOf="@+id/tvFriendTime" />
+
+    <ImageView
+        android:id="@+id/ivFriendPic"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/img_playerbg"
+        app:layout_constraintBottom_toTopOf="@id/chessBoard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintRight_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvFriend"
+        android:layout_width="50dp"
+        android:layout_height="17dp"
+        android:layout_marginRight="5dp"
+        android:maxLines="1"
+        android:textColor="#ff5454"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/ivFriendPic"
+        app:layout_constraintRight_toLeftOf="@id/ivFriendPic"
+        app:layout_constraintTop_toTopOf="@id/ivFriendPic" />
+
+    <csu.edu.ice.gobang.widget.ChessBoard
+        android:layout_marginBottom="10dp"
+        android:id="@+id/chessBoard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="#c69d35"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.496" />
+
+    <Button
+        android:visibility="gone"
+        android:id="@+id/btnReady"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorPrimary"
+        android:text="准备"
+        android:textColor="#fff"
+        app:layout_constraintBottom_toBottomOf="@+id/chessBoard"
+        app:layout_constraintEnd_toEndOf="@+id/chessBoard"
+        app:layout_constraintStart_toStartOf="@+id/chessBoard"
+        app:layout_constraintTop_toTopOf="@+id/chessBoard" />
+
+
+
+    <Button
+        android:id="@+id/btnConfirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/chessBoard"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/luozi_selector"
+        android:enabled="false"
+        android:text="确认落子"
+        android:textColor="#fff"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTip" />
+
+
+    <TextView
+        android:layout_marginTop="8dp"
+        android:id="@+id/tvTip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="小贴士：点击棋盘后，可以通过滑动控制棋子的移动"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chessBoard" />
+
+
+</android.support.constraint.ConstraintLayout>
