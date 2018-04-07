@@ -25,6 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:text="icelee"
+        android:maxLines="1"
         android:textColor="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="@+id/ivMyPic"
         app:layout_constraintLeft_toRightOf="@id/ivMyPic"

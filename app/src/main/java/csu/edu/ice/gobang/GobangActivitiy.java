@@ -126,6 +126,7 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
         ivMyChess = findViewById(R.id.ivMyChess);
         ivFriendChess = findViewById(R.id.ivFriendChess);
         ivFriendPic = findViewById(R.id.ivFriendPic);
+        tvUserId = findViewById(R.id.tvUserId);
     }
 
     private void initSocket() {
