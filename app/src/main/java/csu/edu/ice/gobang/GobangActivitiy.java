@@ -101,10 +101,10 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
             chessBoard.setCanLuoZi(false);
             Log.d(TAG, "onCreate: "+winColor+"  myColor:"+chessColor);
             if(winColor == chessColor){
-                showResult(true);//胜利
+                showResultDelay(true);//胜利
                 isWin = true;
             }else{
-                showResult(false);
+                showResultDelay(false);
                 isWin = false;
             }
             isEnd = true;
@@ -196,8 +196,9 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
         }else if(MsgBean.type_disconnect.equalsIgnoreCase(msg.getMessage())){
             onFriendExit();
         }else if(MsgBean.type_timeout.equalsIgnoreCase(msg.getMessage())){
-            showResult(true);//对方超时了
+            isEnd =true;
             isWin = true;
+            showResult(true);//对方超时了
         }
     }
 
@@ -209,6 +210,7 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
         countDownTimer.cancel();
         tvFriend.setText("已退出");
         isWin = true;
+        isEnd = true;
         showResult(true);
 //        socketUtil.closeSocket();
     }
@@ -294,6 +296,8 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
             MsgBean msgBean = new MsgBean();
             msgBean.setMessage("timeout");
             socketUtil.sendMessage(new EasyMessage(EasyMessage.type_user_message, userId, friendId, msgBean), null);
+            isWin = false;
+            isEnd = true;
             showResult(false);
         }
     }
@@ -303,9 +307,6 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
      * @param isWin
      */
     public void showResult(boolean isWin){
-        this.isWin = isWin;
-        if(isEnd) return;
-        isEnd = true;
         ResultDialog resultDialog = new ResultDialog();
         if(isWin){
             resultDialog.setCancelable(true);
@@ -315,8 +316,15 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
         String url;
         if(isWin) url = winImageUrls[(int) (System.currentTimeMillis()%winImageUrls.length)];
         else url = lostImageUrls[(int) (System.currentTimeMillis()%winImageUrls.length)];
-            resultDialog.setArguments(url, isWin);
-            resultDialog.show(getSupportFragmentManager(), "resultDialog");
+        resultDialog.setArguments(url, isWin);
+        resultDialog.show(getSupportFragmentManager(), "resultDialog");
+    }
+
+    public void showResultDelay(boolean isWin){
+        this.isWin = isWin;
+        if(isEnd) return;
+        isEnd = true;
+        tvUserId.postDelayed(() -> showResult(isWin), 2000);
     }
 
     @Override
@@ -332,6 +340,8 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
                     .setNegativeButton("继续游戏",null)
                     .setPositiveButton("确认退出", (dialog, which) -> {
                         sendDisconnectMessage();
+                        isEnd = true;
+                        isWin = false;
                         showResult(false);
                     })
                     .create()

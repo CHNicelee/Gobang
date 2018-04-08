@@ -120,6 +120,17 @@ public class ChessBoard extends View {
         //中间
         canvas.drawCircle(startX+7*gap,startY+7*gap,pointRadius+3,mLinePaint);
 
+        //有一方胜利了    标识出五颗棋子
+        if(isWin){
+            for (int i = 0; i < winPoints.length; i++) {
+                int x = winPoints[i][0];
+                int y = winPoints[i][1];
+                int centerX = (int) (startX+(x*gap));
+                int centerY = (int) (startY+(y*gap));
+                canvas.drawCircle(centerX,centerY,mChessRadius+10, mCirclePaint);
+            }
+        }
+
         mChessRadius = (int) (gap*0.45);
         Bitmap blackChessBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.black_chess_2);
         Bitmap whiteChessBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.white_chess_2);
@@ -156,6 +167,8 @@ public class ChessBoard extends View {
             int centerY = (int) (startY + (mNewPosY * gap));
             canvas.drawCircle(centerX, centerY, 10, mCirclePaint);
         }
+
+
     }
 
     /**
@@ -212,18 +225,6 @@ public class ChessBoard extends View {
                     mDownPosX  = mMovingX;
                     mDownPosY = mMovingY;
                     return true;
-
-/*                //无法落子 此次点击作废
-                if(!isValidPosition(tempPosX,tempPosY))return false;
-//                mChessBoard[mMovingX][mMovingY] = 'B';
-                mMovingX = tempPosX;
-                mMovingY = tempPosY;
-                mDownPosX = tempPosX;
-                mDownPosY = tempPosY;
-                moving = true;
-
-                if(mOnChessDownListener!=null) mOnChessDownListener.onDown(mMovingX,mMovingY);
-                invalidate();*/
 
             case MotionEvent.ACTION_MOVE:
                 if(!isMoving())return false;
@@ -309,7 +310,7 @@ public class ChessBoard extends View {
         mChessBoard[mMovingY][mMovingX] = (mChessColor==COLOR_BLACK? 'B':'W');
         mNewPosX = mMovingX;
         mNewPosY = mMovingY;
-        if(mOnWinListener!=null && isWin(mMovingX,mMovingY,mChessColor)){
+        if(mOnWinListener!=null && (isWin = isWin(mMovingX,mMovingY,mChessColor))){
             mOnWinListener.onWin(mChessColor);
         }
         mMovingY = mMovingX = -1;
@@ -337,11 +338,11 @@ public class ChessBoard extends View {
         mNewPosX = x;
         mNewPosY = y;
         mHasChess = true;
-        invalidate();
         moving = false;
-        if(mOnWinListener!=null && isWin(x,y,color)){
+        if(mOnWinListener!=null && (isWin = isWin(x,y,color))){
             mOnWinListener.onWin(color);
         }
+        invalidate();
         return true;
     }
 
@@ -351,6 +352,8 @@ public class ChessBoard extends View {
     public void setOnChessDownListener(OnChessDownListener onChessDownListener){
         this.mOnChessDownListener = onChessDownListener;
     }
+
+    int winPoints[][] = new int[5][2];
 
     /**
      * 判断是否赢了
@@ -371,6 +374,8 @@ public class ChessBoard extends View {
         int count = 0;
             for(int col = startX;col<=endX;col++){
                 if(chessColor == getChessColor(col,y)){
+                    winPoints[count][0] = col;
+                    winPoints[count][1] = y;
                     count++;
                     if(count==5){
                         return true;
@@ -385,6 +390,8 @@ public class ChessBoard extends View {
         Log.d(TAG, "isWin: startY"+startY+" endY"+endY);
         for(int row = startY;row<=endY;row++){
                 if(chessColor == getChessColor(x,row)){
+                    winPoints[count][0] = x;
+                    winPoints[count][1] = row;
                     count++;
                     if(count==5)return true;
                 }else{
@@ -403,6 +410,8 @@ public class ChessBoard extends View {
                 continue;
             }
             if(chessColor == getChessColor(col,row)){
+                winPoints[count][0] = col;
+                winPoints[count][1] = row;
                 count++;
                 if(count==5)return true;
             }else{
@@ -423,6 +432,8 @@ public class ChessBoard extends View {
                 continue;
             }
             if(chessColor == getChessColor(col,row)){
+                winPoints[count][0] = col;
+                winPoints[count][1] = row;
                 count++;
                 if(count==5)return true;
             }else{
@@ -434,7 +445,7 @@ public class ChessBoard extends View {
 
         return false;
     }
-
+    public boolean isWin = false;
     public int getChessColor(int x,int y){
         if(mChessBoard[y][x] == 'B')return COLOR_BLACK;
         else if(mChessBoard[y][x] == 'W')return COLOR_WHITE;
@@ -456,5 +467,16 @@ public class ChessBoard extends View {
     }
     public interface OnWinListener{
         void onWin(int chessColor);
+    }
+
+    class Point{
+        public int x;
+        public int y;
+        public int color;
+
+        public Point(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
     }
 }
