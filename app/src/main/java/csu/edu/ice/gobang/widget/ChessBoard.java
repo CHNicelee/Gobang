@@ -16,7 +16,7 @@ import android.view.View;
 import csu.edu.ice.gobang.R;
 
 /**
- * Created by ice on 2018/4/3.
+ * Created by ice on 2018/4/three.
  */
 
 public class ChessBoard extends View {
@@ -64,9 +64,9 @@ public class ChessBoard extends View {
 /*
         mChessBoard[5][5] = 'B';
         mChessBoard[4][5] = 'W';
-        mChessBoard[4][3] = 'B';
-        mChessBoard[5][3] = 'W';
-        mChessBoard[4][2] = 'B';*/
+        mChessBoard[4][three] = 'B';
+        mChessBoard[5][three] = 'W';
+        mChessBoard[4][two] = 'B';*/
 
     }
     @Override

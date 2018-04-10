@@ -3,7 +3,7 @@ package csu.edu.ice.gobang;
 import com.google.gson.Gson;
 
 /**
- * Created by ice on 2018/4/1.
+ * Created by ice on 2018/4/one.
  */
 public class GsonConverter implements Converter {
     public static Gson gson = new Gson();

@@ -6,21 +6,37 @@ import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.zhouwei.library.CustomPopWindow;
+import com.squareup.picasso.Picasso;
+
 import junit.framework.Assert;
 
+import java.util.Arrays;
+
+import csu.edu.ice.gobang.adapter.MessageAdapter;
 import csu.edu.ice.gobang.widget.ChessBoard;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
- * Created by ice on 2018/4/3.
+ * Created by ice on 2018/4/three.
  */
 
 public class GobangActivitiy extends AppCompatActivity implements SocketUtil.MessageHandler {
@@ -33,14 +49,15 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
     private int chessColor;
     private ChessBoard chessBoard;
     private TextView tvFriend,tvUserId;
-    private TextView tvRoom,tvRoomTip;
-    private ImageView ivFriendPic,ivMyChess,ivFriendChess;
+    private TextView tvRoom,tvRoomTip,tvMyMessage,tvFriendMessage;
+    private ImageView ivFriendPic,ivMyChess,ivFriendChess,ivTop,ivBottom,ivMessage;
     private TextView tvMyTime,tvFriendTime;
 
     private boolean isEnd = false;
     private AlertDialog alertDialog;
     private int totalTime = 3 * 10000;//倒计时
     private boolean isWin = false;
+
 
     private String[] lostImageUrls = {"http://img5.imgtn.bdimg.com/it/u=824535348,1848358469&fm=27&gp=0.jpg",
             "http://img5.imgtn.bdimg.com/it/u=3506604075,4147732860&fm=27&gp=0.jpg",
@@ -74,6 +91,7 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
     };
 
     int[] result = new int[3];//落子的x y坐标和color
+    private CustomPopWindow mListPopWindow;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -110,12 +128,16 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
             isEnd = true;
         });
 
+        ivMessage.setOnClickListener(v -> showMessageView());
         initSocket();
 
     }
 
 
     private void initView() {
+        ivMessage = findViewById(R.id.ivMessage);
+        tvMyMessage = findViewById(R.id.tvMyMessage);
+        tvFriendMessage = findViewById(R.id.tvFriendMessage);
         tvRoom = findViewById(R.id.tvRoom);
         tvRoomTip = findViewById(R.id.tvRoomTip);
         chessBoard = findViewById(R.id.chessBoard);
@@ -127,6 +149,8 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
         ivFriendChess = findViewById(R.id.ivFriendChess);
         ivFriendPic = findViewById(R.id.ivFriendPic);
         tvUserId = findViewById(R.id.tvUserId);
+        ivTop = findViewById(R.id.ivTop);
+        ivBottom = findViewById(R.id.ivBottom);
     }
 
     private void initSocket() {
@@ -243,13 +267,9 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
         chessColor = msg.getColor();
         chessBoard.setChessColor(chessColor);
         Boolean moveFirst = msg.getMoveFirst();
-        String tip = "您的好友已经加入了房间，可以开始对战了";
-        if(moveFirst)tip+="您是先手";
-        else tip+="您是后手";
-        Toast.makeText(this, tip, Toast.LENGTH_SHORT).show();
-        if(moveFirst){
-            chessBoard.setCanLuoZi(true);
-        }
+//        String tip = "您的好友已经加入了房间，可以开始对战了";
+//        if(moveFirst)tip+="您是先手";
+//        else tip+="您是后手";
 
         ivFriendPic.setImageResource(R.drawable.btn_player);
         if(chessColor == ChessBoard.COLOR_WHITE) {
@@ -264,6 +284,49 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
         tvFriendTime.setVisibility(View.VISIBLE);
         ivFriendChess.setVisibility(View.VISIBLE);
         tvFriend.setVisibility(View.VISIBLE);
+
+        ivTop.setVisibility(View.VISIBLE);
+        ivBottom.setVisibility(View.VISIBLE);
+
+        ScaleAnimation scaleAnimation = new ScaleAnimation(0,1.5f,0,1.5f);
+        scaleAnimation.setDuration(1000);
+        scaleAnimation.setFillAfter(false);
+        int res[] = new int[]{R.mipmap.three,R.mipmap.two,R.mipmap.one,R.mipmap.begin};
+
+        Observable.create((ObservableEmitter<Integer> e) -> {
+            for (int i = 0; i <= 3; i++) {
+                e.onNext(i);
+                Thread.sleep(1000);
+            }
+            Thread.sleep(500);
+            e.onNext(4);
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((Integer index) -> {
+                    ivTop.clearAnimation();
+                    if(index == 4) {
+                        //开始比赛
+                        //开始比赛
+                        if(moveFirst){
+                            chessBoard.setCanLuoZi(true);
+                        }
+                        ivBottom.setVisibility(View.GONE);
+                        ivTop.setVisibility(View.GONE);
+                        return;
+                    }
+                    Picasso.with(GobangActivitiy.this).load(res[index]).into(ivTop);
+                    if(index == 3){
+                        //显示我方先手 或 后手
+                        if(moveFirst){
+                            Picasso.with(GobangActivitiy.this).load(R.mipmap.first_move).into(ivBottom);
+                        }else{
+                            Picasso.with(GobangActivitiy.this).load(R.mipmap.second_move).into(ivBottom);
+                        }
+                    }else{
+                        ivTop.startAnimation(scaleAnimation);
+                    }
+                });
+
     }
 
     public void sendMoveMessage(int x,int y){
@@ -307,6 +370,7 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
      * @param isWin
      */
     public void showResult(boolean isWin){
+        if(isShowed)return;
         ResultDialog resultDialog = new ResultDialog();
         if(isWin){
             resultDialog.setCancelable(true);
@@ -318,7 +382,49 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
         else url = lostImageUrls[(int) (System.currentTimeMillis()%winImageUrls.length)];
         resultDialog.setArguments(url, isWin);
         resultDialog.show(getSupportFragmentManager(), "resultDialog");
+        isShowed = true;
     }
+
+    /**
+     * 显示消息列表
+     */
+    public void showMessageView(){
+        if(mListPopWindow!=null){
+            mListPopWindow.showAsDropDown(ivMessage,0,-550);
+            return;
+        }
+        View contentView = LayoutInflater.from(this).inflate(R.layout.popview_message,null);
+        //处理popWindow 显示内容
+        handleListView(contentView);
+        //创建并显示popWindow
+        mListPopWindow= new CustomPopWindow.PopupWindowBuilder(this)
+                .setView(contentView)
+                .size(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)//显示大小
+                .create();
+        PopupWindow popWindow = mListPopWindow.getPopupWindow();
+        Log.d(TAG, "showMessageView: height:"+popWindow.getHeight());
+        mListPopWindow.showAsDropDown(ivMessage,0,-550);
+//        popWindow.showAtLocation(chessBoard.getRootView(), Gravity.NO_GRAVITY,0,chessBoard.getTop());
+    }
+
+    private void handleListView(View contentView){
+        RecyclerView recyclerView = contentView.findViewById(R.id.recyclerView);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        manager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(manager);
+        String messages[] = {"一着不慎，满盘皆输！","少侠，能快点吗？？？","和阁下过招真是快哉！"};
+        MessageAdapter adapter = new MessageAdapter(R.layout.item_message, Arrays.asList(messages));
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+        adapter.setOnItemClickListener((adapter1, view, position) -> {
+            MsgBean msgBean = new MsgBean();
+            socketUtil.sendMessage(new EasyMessage(userId,friendId,),null);
+        });
+    }
+
+    //是否已经弹窗了
+    private boolean isShowed = false;
 
     public void showResultDelay(boolean isWin){
         this.isWin = isWin;

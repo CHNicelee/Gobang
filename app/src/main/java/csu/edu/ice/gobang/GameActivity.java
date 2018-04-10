@@ -11,7 +11,7 @@ import android.widget.Toast;
 import java.net.Socket;
 
 /**
- * Created by ice on 2018/3/30.
+ * Created by ice on 2018/three/30.
  */
 
 public class GameActivity extends AppCompatActivity  implements SocketUtil.MessageHandler{
@@ -53,7 +53,7 @@ public class GameActivity extends AppCompatActivity  implements SocketUtil.Messa
         msgBean.setRoom(roomNumber);
         socketUtil = new SocketUtil(this);
         socketUtil.setDataClass(MsgBean.class);
-        socketUtil.connect("192.168.191.1", 8885, new EasyMessage(userId,null,msgBean), new SocketUtil.Callback() {
+        socketUtil.connect("192.168.191.one", 8885, new EasyMessage(userId,null,msgBean), new SocketUtil.Callback() {
             @Override
             public void onSuccess() {
                 Toast.makeText(GameActivity.this, "服务器连接成功", Toast.LENGTH_SHORT).show();

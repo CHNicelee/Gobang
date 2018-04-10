@@ -1,7 +1,7 @@
 package csu.edu.ice.gobang;
 
 /**
- * Created by ice on 2018/3/29.
+ * Created by ice on 2018/three/29.
  */
 public class MsgBean {
     public final static String type_connect = "connected";
