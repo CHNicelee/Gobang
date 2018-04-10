@@ -42,6 +42,9 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
     private int totalTime = 3 * 10000;//倒计时
     private boolean isWin = false;
 
+    boolean myTurn = true;
+
+    //胜利或失败的图片
     private String[] lostImageUrls = {"http://img5.imgtn.bdimg.com/it/u=824535348,1848358469&fm=27&gp=0.jpg",
             "http://img5.imgtn.bdimg.com/it/u=3506604075,4147732860&fm=27&gp=0.jpg",
             "http://img0.imgtn.bdimg.com/it/u=1815751955,4088443349&fm=214&gp=0.jpg",
@@ -88,14 +91,15 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
         chessBoard.setOnChessDownListener((x, y) -> btnConfirm.setEnabled(true));
 
         btnConfirm.setOnClickListener(e->{
-            chessBoard.confirmPosition(result);
-            btnConfirm.setEnabled(false);
-            chessBoard.setCanLuoZi(false);
-            sendMoveMessage(result[0],result[1]);
-            myTurn = false;
-            resetTime(tvMyTime);
-            countDownTimer.cancel();
-            countDownTimer.start();
+            if(chessBoard.confirmPosition(result)) {
+                btnConfirm.setEnabled(false);
+                chessBoard.setCanLuoZi(false);
+                sendMoveMessage(result[0], result[1]);
+                myTurn = false;
+                resetTime(tvMyTime);
+                countDownTimer.cancel();
+                countDownTimer.start();
+            }
         });
         chessBoard.setOnWinListener(winColor -> {
             chessBoard.setCanLuoZi(false);
@@ -115,6 +119,7 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
     }
 
 
+    //初始化
     private void initView() {
         tvRoom = findViewById(R.id.tvRoom);
         tvRoomTip = findViewById(R.id.tvRoomTip);
@@ -129,6 +134,7 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
         tvUserId = findViewById(R.id.tvUserId);
     }
 
+    //初始化socket
     private void initSocket() {
         Integer room = getIntent().getIntExtra("roomNumber",-1);
         userId  = getIntent().getIntExtra("userId",-1);
@@ -284,6 +290,10 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
         });
 
     }
+    /**
+     *
+     * 重置时间
+     */
     public void resetTime(TextView tvMyTime){
         tvMyTime.setText("00:30");
         tvMyTime.setTextColor(Color.BLACK);
@@ -352,7 +362,7 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
         return super.onKeyDown(keyCode, event);
     }
 
-    boolean myTurn = true;
+
 
     @Override
     protected void onDestroy() {

@@ -207,6 +207,7 @@ public class ChessBoard extends View {
     long downTime;
     boolean isNewChess = true;
     @Override
+    //点击事件
     public boolean onTouchEvent(MotionEvent event) {
         if(!canLuoZi)return false;
         float gap = (float) ((mWidth - 2*padding)*1.0/(mLineCounts-1));
@@ -299,13 +300,16 @@ public class ChessBoard extends View {
      * 移动之后 确定落子
      * @param a  用于带出参数
      */
-    public void confirmPosition(@Nullable int[] a){
+    public boolean confirmPosition(@Nullable int[] a){
         if(a!=null && a.length>2){
             a[0] = mMovingX;
             a[1] = mMovingY;
             a[2] = mChessColor;
         }
 
+        if(mMovingX==-1||mMovingY==-1){
+            return false;
+        }
         mHasChess = true;
         mChessBoard[mMovingY][mMovingX] = (mChessColor==COLOR_BLACK? 'B':'W');
         mNewPosX = mMovingX;
@@ -318,6 +322,7 @@ public class ChessBoard extends View {
         moving = false;
         isNewChess = true;
         invalidate();
+        return true;
 
     }
 

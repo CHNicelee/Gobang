@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">五指棋</string>
+    <string name="app_name">五子棋</string>
     <string name="success">恭喜您取得胜利！\n此图片作为奖励供官人欣赏！\n再接再厉哟！</string>
     <string name="failed">很遗憾您输了！\n此图片作为您的处罚！\n三秒后方可返回！</string>
 </resources>
