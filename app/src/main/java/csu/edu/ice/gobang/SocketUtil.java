@@ -1,3 +1,4 @@
+
 package csu.edu.ice.gobang;
 
 import android.support.annotation.NonNull;
@@ -21,7 +22,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * Created by ice on 2018/three/30.
+ * Created by ice on 2018/3/30.
  */
 
 public class SocketUtil {

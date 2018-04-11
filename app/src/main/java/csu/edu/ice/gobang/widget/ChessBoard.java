@@ -1,3 +1,4 @@
+
 package csu.edu.ice.gobang.widget;
 
 import android.content.Context;
@@ -16,7 +17,7 @@ import android.view.View;
 import csu.edu.ice.gobang.R;
 
 /**
- * Created by ice on 2018/4/three.
+ * Created by ice on 2018/4/3.
  */
 
 public class ChessBoard extends View {
@@ -64,9 +65,9 @@ public class ChessBoard extends View {
 /*
         mChessBoard[5][5] = 'B';
         mChessBoard[4][5] = 'W';
-        mChessBoard[4][three] = 'B';
-        mChessBoard[5][three] = 'W';
-        mChessBoard[4][two] = 'B';*/
+        mChessBoard[4][3] = 'B';
+        mChessBoard[5][3] = 'W';
+        mChessBoard[4][2] = 'B';*/
 
     }
     @Override
@@ -207,6 +208,7 @@ public class ChessBoard extends View {
     long downTime;
     boolean isNewChess = true;
     @Override
+    //点击事件
     public boolean onTouchEvent(MotionEvent event) {
         if(!canLuoZi)return false;
         float gap = (float) ((mWidth - 2*padding)*1.0/(mLineCounts-1));
@@ -299,13 +301,16 @@ public class ChessBoard extends View {
      * 移动之后 确定落子
      * @param a  用于带出参数
      */
-    public void confirmPosition(@Nullable int[] a){
+    public boolean confirmPosition(@Nullable int[] a){
         if(a!=null && a.length>2){
             a[0] = mMovingX;
             a[1] = mMovingY;
             a[2] = mChessColor;
         }
 
+        if(mMovingX==-1||mMovingY==-1){
+            return false;
+        }
         mHasChess = true;
         mChessBoard[mMovingY][mMovingX] = (mChessColor==COLOR_BLACK? 'B':'W');
         mNewPosX = mMovingX;
@@ -318,6 +323,7 @@ public class ChessBoard extends View {
         moving = false;
         isNewChess = true;
         invalidate();
+        return true;
 
     }
 

@@ -1,9 +1,10 @@
+
 package csu.edu.ice.gobang;
 
 import com.google.gson.Gson;
 
 /**
- * Created by ice on 2018/4/one.
+ * Created by ice on 2018/4/1.
  */
 public class GsonConverter implements Converter {
     public static Gson gson = new Gson();

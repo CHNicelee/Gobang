@@ -25,11 +25,13 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
         int seconds = (int) (System.currentTimeMillis() / 1000);
+        //从sharedPreferences文件中读取user对象
         SharedPreferences sp = getSharedPreferences("user", MODE_PRIVATE);
         if(sp.getInt("id",-1)!=-1){
             //不是第一次
              id = sp.getInt("id",-1);
         }else {
+            //如果没有就通过sharedpreference.editor 创建一个叫user 的文件名，并存入id 属性
             id = seconds;
             SharedPreferences.Editor editor = getSharedPreferences("user", MODE_PRIVATE).edit();
             editor.putInt("id", id);

@@ -41,7 +41,8 @@ import io.reactivex.schedulers.Schedulers;
 
 public class GobangActivitiy extends AppCompatActivity implements SocketUtil.MessageHandler {
     private static final String TAG = "GobangActivity";
-    private static String ip = "www.ice97.cn";
+    private static final long MESSAGE_TIME = 3000;
+    private static String ip = "192.168.191.1";
     private static int port = 8885;
     private SocketUtil socketUtil;
     private int userId;
@@ -212,18 +213,38 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
     public void handleMessage(EasyMessage easyMessage) {
         Log.d(TAG, "handleMessage: "+easyMessage);
         MsgBean msg = (MsgBean) easyMessage.getMessage();
-
-        if(MsgBean.type_connect.equalsIgnoreCase(msg.getMessage())){
-            onFriendComeIn(easyMessage,msg);
-        }else if(MsgBean.type_newChess.equalsIgnoreCase(msg.getMessage())){
-            onFriendLuoZi(msg);
-        }else if(MsgBean.type_disconnect.equalsIgnoreCase(msg.getMessage())){
-            onFriendExit();
-        }else if(MsgBean.type_timeout.equalsIgnoreCase(msg.getMessage())){
-            isEnd =true;
-            isWin = true;
-            showResult(true);//对方超时了
+        if(msg==null || msg.getType()==null)return;
+        switch (msg.getType()){
+            case MsgBean.type_connect:
+                onFriendComeIn(easyMessage,msg);
+                break;
+            case MsgBean.type_disconnect:
+                onFriendExit();
+                break;
+            case MsgBean.type_friendMessage:
+                showFromFriendMessage(msg.getMessage());
+                break;
+            case MsgBean.type_newChess:
+                onFriendLuoZi(msg);
+                break;
+            case MsgBean.type_timeout:
+                isEnd =true;
+                isWin = true;
+                showResult(true);//对方超时了
+                break;
         }
+
+    }
+
+    /**
+     * 显示好友发来的消息
+     * @param message
+     */
+    private void showFromFriendMessage(String message) {
+        tvMyMessage.setVisibility(View.GONE);
+        tvFriendMessage.setText(message);
+        tvFriendMessage.setVisibility(View.VISIBLE);
+        tvFriendMessage.postDelayed(()-> tvFriendMessage.setVisibility(View.GONE),MESSAGE_TIME);
     }
 
     /**
@@ -332,7 +353,7 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
     public void sendMoveMessage(int x,int y){
         MsgBean msgBean = new MsgBean(x,y);
         msgBean.setColor(chessColor);
-        msgBean.setMessage(MsgBean.type_newChess);
+        msgBean.setType(MsgBean.type_newChess);
         EasyMessage easyMsg = new EasyMessage(userId, friendId, msgBean);
         socketUtil.sendMessage(easyMsg, new SocketUtil.Callback() {
             @Override
@@ -347,6 +368,8 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
         });
 
     }
+
+    //重置倒计时
     public void resetTime(TextView tvMyTime){
         tvMyTime.setText("00:30");
         tvMyTime.setTextColor(Color.BLACK);
@@ -357,7 +380,7 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
     private void onTimeFinished() {
         if(myTurn){
             MsgBean msgBean = new MsgBean();
-            msgBean.setMessage("timeout");
+            msgBean.setType(MsgBean.type_timeout);
             socketUtil.sendMessage(new EasyMessage(EasyMessage.type_user_message, userId, friendId, msgBean), null);
             isWin = false;
             isEnd = true;
@@ -418,9 +441,33 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
         adapter.notifyDataSetChanged();
 
         adapter.setOnItemClickListener((adapter1, view, position) -> {
+            mListPopWindow.dissmiss();
             MsgBean msgBean = new MsgBean();
-            socketUtil.sendMessage(new EasyMessage(userId,friendId,),null);
+            msgBean.setType(MsgBean.type_friendMessage);
+            msgBean.setMessage(messages[position]);
+            socketUtil.sendMessage(new EasyMessage(userId, friendId, msgBean), new SocketUtil.Callback() {
+                @Override
+                public void onSuccess() {
+                    showSendToFriendMessage(msgBean.getMessage());
+                }
+
+                @Override
+                public void onFailed(String errorMsg) {
+
+                }
+            });
         });
+    }
+
+    /**
+     * 显示我发给好友的消息
+     * @param message
+     */
+    private void showSendToFriendMessage(String message) {
+        tvFriendMessage.setVisibility(View.GONE);
+        tvMyMessage.setText(message);
+        tvMyMessage.setVisibility(View.VISIBLE);
+        tvMyMessage.postDelayed(()-> tvMyMessage.setVisibility(View.GONE),MESSAGE_TIME);
     }
 
     //是否已经弹窗了
@@ -469,7 +516,7 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
 
     public void sendDisconnectMessage(){
         MsgBean msgBean = new MsgBean();
-        msgBean.setMessage(MsgBean.type_disconnect);
+        msgBean.setType(MsgBean.type_disconnect);
         socketUtil.sendMessage(new EasyMessage(userId, friendId, msgBean), new SocketUtil.Callback() {
             @Override
             public void onSuccess() {
@@ -484,3 +531,4 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
     }
 
 }
+

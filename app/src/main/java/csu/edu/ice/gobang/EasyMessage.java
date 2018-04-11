@@ -1,7 +1,8 @@
+
 package csu.edu.ice.gobang;
 
 /**
- * Created by ice on 2018/three/31.
+ * Created by ice on 2018/3/31.
  */
 public class EasyMessage {
     public  static final String replaceStr = "/*a#z*/";

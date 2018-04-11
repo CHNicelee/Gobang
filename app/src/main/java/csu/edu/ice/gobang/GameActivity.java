@@ -1,3 +1,4 @@
+
 package csu.edu.ice.gobang;
 
 import android.os.Bundle;
@@ -11,7 +12,7 @@ import android.widget.Toast;
 import java.net.Socket;
 
 /**
- * Created by ice on 2018/three/30.
+ * Created by ice on 2018/3/30.
  */
 
 public class GameActivity extends AppCompatActivity  implements SocketUtil.MessageHandler{
@@ -53,7 +54,7 @@ public class GameActivity extends AppCompatActivity  implements SocketUtil.Messa
         msgBean.setRoom(roomNumber);
         socketUtil = new SocketUtil(this);
         socketUtil.setDataClass(MsgBean.class);
-        socketUtil.connect("192.168.191.one", 8885, new EasyMessage(userId,null,msgBean), new SocketUtil.Callback() {
+        socketUtil.connect("192.168.191.1", 8885, new EasyMessage(userId,null,msgBean), new SocketUtil.Callback() {
             @Override
             public void onSuccess() {
                 Toast.makeText(GameActivity.this, "服务器连接成功", Toast.LENGTH_SHORT).show();
@@ -117,7 +118,7 @@ public class GameActivity extends AppCompatActivity  implements SocketUtil.Messa
                 Toast.makeText(this, "对方已经退出了房间", Toast.LENGTH_SHORT).show();
                 tvFriend.setText("好友已退出");
             }else {
-                tvMessage.append(easyMessage.getFromKey() + "对你说:" + ((MsgBean)easyMessage.getMessage()).getMessage() + "\n");
+                tvMessage.append(easyMessage.getFromKey() + "对你说:" + ((MsgBean)easyMessage.getMessage()).getType() + "\n");
 //                tvMessage.append(msgBean.getFrom() + "对你说:" + msgBean.getMessage() + "\n");
             }
         }

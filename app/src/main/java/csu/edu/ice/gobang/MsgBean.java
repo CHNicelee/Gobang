@@ -1,13 +1,17 @@
 package csu.edu.ice.gobang;
-
 /**
- * Created by ice on 2018/three/29.
+ * Created by ice on 2018/3/29.
  */
 public class MsgBean {
+    //棋子颜色
+    public final static Integer COLOR_BLACK = 1;
+    public final static Integer COLOR_WHITE = 0;
+
     public final static String type_connect = "connected";
     public final static String type_newChess = "newChess";
-    public static String type_disconnect = "disconnect";
-    public static String type_timeout = "timeout";
+    public final static String type_disconnect = "disconnect";
+    public final static String type_timeout = "timeout";
+    public final static String type_friendMessage = "friendMessage";
 
     public MsgBean() {
     }
@@ -16,12 +20,22 @@ public class MsgBean {
         this.x = x;
         this.y = y;
     }
+
     private Integer y;
     private Integer x;
     private Integer color;
-    private String message;
+    private String type;
     private Integer room;
     private Boolean moveFirst;
+    private String message;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     public Integer getColor() {
         return color;
@@ -55,12 +69,12 @@ public class MsgBean {
         this.y = y;
     }
 
-    public String getMessage() {
-        return message;
+    public String getType() {
+        return type;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public void setY(Integer y) {
