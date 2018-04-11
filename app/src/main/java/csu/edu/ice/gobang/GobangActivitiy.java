@@ -42,7 +42,7 @@ import io.reactivex.schedulers.Schedulers;
 public class GobangActivitiy extends AppCompatActivity implements SocketUtil.MessageHandler {
     private static final String TAG = "GobangActivity";
     private static final long MESSAGE_TIME = 3000;
-    private static String ip = "192.168.191.1";
+    private static String ip = "www.ice97.cn";
     private static int port = 8885;
     private SocketUtil socketUtil;
     private int userId;
@@ -104,19 +104,24 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
         initView();
 
         Button btnConfirm = findViewById(R.id.btnConfirm);
+        chessBoard.setNeedShowNewestCircle(true);//显示最新的棋子上面的圆点
+        chessBoard.setNeedShowSequence(false);//不显示序号
         chessBoard.setOnChessDownListener((x, y) -> btnConfirm.setEnabled(true));
 
         btnConfirm.setOnClickListener(e->{
+            resetTime(tvMyTime);
+            countDownTimer.cancel();
+            countDownTimer.start();
             chessBoard.confirmPosition(result);
             btnConfirm.setEnabled(false);
             chessBoard.setCanLuoZi(false);
             sendMoveMessage(result[0],result[1]);
             myTurn = false;
-            resetTime(tvMyTime);
-            countDownTimer.cancel();
-            countDownTimer.start();
         });
         chessBoard.setOnWinListener(winColor -> {
+            countDownTimer.cancel();
+            chessBoard.setNeedShowNewestCircle(false);
+            chessBoard.setNeedShowSequence(true);
             chessBoard.setCanLuoZi(false);
             Log.d(TAG, "onCreate: "+winColor+"  myColor:"+chessColor);
             if(winColor == chessColor){
@@ -127,6 +132,7 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
                 isWin = false;
             }
             isEnd = true;
+            chessBoard.invalidate();
         });
 
         ivMessage.setOnClickListener(v -> showMessageView());
@@ -251,6 +257,7 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
      * 当好友退出了游戏
      */
     private void onFriendExit() {
+        if(isEnd)return;
         Toast.makeText(this, "您的对手已经退出游戏了！", Toast.LENGTH_SHORT).show();
         countDownTimer.cancel();
         tvFriend.setText("已退出");
@@ -266,13 +273,14 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
      */
     private void onFriendLuoZi(MsgBean msg) {
         chessBoard.setCanLuoZi(true);
-        chessBoard.addChess(msg.getX(),msg.getY(),msg.getColor());
-        if(!isEnd)
-            Toast.makeText(this, "轮到客官您了", Toast.LENGTH_SHORT).show();
         countDownTimer.cancel();
         myTurn = true;
         resetTime(tvFriendTime);
         countDownTimer.start();
+        chessBoard.addChess(msg.getX(),msg.getY(),msg.getColor());
+        if(!isEnd)
+            Toast.makeText(this, "轮到客官您了", Toast.LENGTH_SHORT).show();
+
     }
 
     /**
@@ -529,6 +537,7 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
             }
         });
     }
+
 
 }
 

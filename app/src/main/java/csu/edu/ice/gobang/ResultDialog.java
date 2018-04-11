@@ -64,7 +64,7 @@ public class ResultDialog extends DialogFragment {
                 return;
             }
             dismiss();
-            getActivity().finish();
+//            getActivity().finish();
         });
 
         return view;
@@ -90,6 +90,6 @@ public class ResultDialog extends DialogFragment {
 
     @Override
     public void onCancel(DialogInterface dialog) {
-        getActivity().finish();
+//        getActivity().finish();
     }
 }
