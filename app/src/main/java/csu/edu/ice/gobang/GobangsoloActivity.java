@@ -36,6 +36,7 @@ public class GobangsoloActivity extends AppCompatActivity {
         chessBoard.setCanLuoZi(true);
 
         Button btnsolo = (Button)findViewById(R.id.btnsoloConfirm);
+        Button btnsoloHuiqi = (Button)findViewById(R.id.btnsoloHuiqi);
         chessBoard.setOnChessDownListener((x, y) -> btnsolo.setEnabled(true));
         chessBoard.setOnWinListener(new ChessBoard.OnWinListener() {
             @Override
@@ -73,10 +74,16 @@ public class GobangsoloActivity extends AppCompatActivity {
             else{
                 Toast.makeText(GobangsoloActivity.this,"请落子后再点击确定按钮",Toast.LENGTH_SHORT).show();
             }
-
-
-
-
+        });
+        btnsoloHuiqi.setOnClickListener(e->{
+            if(chessBoard.ismHasChess()){
+                chessBoard.Huiqi();
+                chessColor = 1-chessColor;
+                Toast.makeText(GobangsoloActivity.this,"悔棋成功",Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(GobangsoloActivity.this,"棋盘上无棋子，不能进行悔棋",Toast.LENGTH_SHORT).show();
+            }
         });
 
     }

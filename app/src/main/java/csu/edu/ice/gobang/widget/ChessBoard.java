@@ -168,6 +168,21 @@ public class ChessBoard extends View {
 
     }
 
+
+    /**判断棋盘上面有没有棋子
+     *
+     *
+     */
+    public boolean ismHasChess(){
+        if(mHasChess){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+
     /**
      * 画最新棋子上面的小圆点
      * @param startX
@@ -433,6 +448,25 @@ public class ChessBoard extends View {
         invalidate();
         return true;
 
+    }
+
+    /**悔棋
+     *
+     *
+     */
+    public void Huiqi(){
+        Point point;
+        point = pointSequence.get(pointSequence.size()-1);
+        mMovingX=point.x;
+        mMovingY=point.y;
+        mChessColor=point.color;
+        mChessBoard[mMovingY][mMovingX] = 'n';
+
+        pointSequence.remove(point);
+        if(pointSequence.isEmpty()){
+            mHasChess = false;
+        }
+        invalidate();
     }
 
     /**
