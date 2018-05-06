@@ -11,17 +11,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" />
+        <activity android:name=".activity.MainActivity" />
         <activity android:name=".GameActivity" />
-        <activity android:name=".GobangActivitiy" />
-        <activity android:name=".ChooseActivity">
+        <activity android:name=".activity.GobangActivitiy" />
+        <activity android:name=".activity.ChooseActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".GobangsoloActivity"></activity>
+        <activity android:name=".activity.GobangSoloActivity"></activity>
     </application>
 
 </manifest>

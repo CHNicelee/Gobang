@@ -1,11 +1,10 @@
-package csu.edu.ice.gobang;
+package csu.edu.ice.gobang.activity;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,7 +19,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.zhouwei.library.CustomPopWindow;
 import com.squareup.picasso.Picasso;
@@ -29,6 +27,11 @@ import junit.framework.Assert;
 
 import java.util.Arrays;
 
+import csu.edu.ice.gobang.EasyMessage;
+import csu.edu.ice.gobang.MsgBean;
+import csu.edu.ice.gobang.R;
+import csu.edu.ice.gobang.ResultDialog;
+import csu.edu.ice.gobang.SocketUtil;
 import csu.edu.ice.gobang.adapter.MessageAdapter;
 import csu.edu.ice.gobang.widget.ChessBoard;
 import io.reactivex.Observable;
@@ -40,7 +43,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by ice on 2018/4/three.
  */
 
-public class GobangActivitiy extends AppCompatActivity implements SocketUtil.MessageHandler {
+public class GobangActivitiy extends BaseActivity implements SocketUtil.MessageHandler {
     private static final String TAG = "GobangActivity";
     private static final long MESSAGE_TIME = 3000;
     private static String ip = "www.ice97.cn";
@@ -181,12 +184,12 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
         socketUtil.connect(ip, port, easyMessage, new SocketUtil.Callback() {
             @Override
             public void onSuccess() {
-                Toast.makeText(GobangActivitiy.this, "官人请邀请好友前来一决雌雄", Toast.LENGTH_SHORT).show();
+                showToast("官人请邀请好友前来一决雌雄");
             }
 
             @Override
             public void onFailed(String errorMsg) {
-                Toast.makeText(GobangActivitiy.this, "不好意思，程序开了小差，请返回重试", Toast.LENGTH_SHORT).show();
+                showToast("不好意思，程序开了小差，请返回重试");
             }
         });
 
@@ -264,7 +267,7 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
      */
     private void onFriendExit() {
         if(isEnd)return;
-        Toast.makeText(this, "您的对手已经退出游戏了！", Toast.LENGTH_SHORT).show();
+        showToast("您的对手已经退出游戏了！");
         countDownTimer.cancel();
         tvFriend.setText("已退出");
         isWin = true;
@@ -284,9 +287,9 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
         resetTime(tvFriendTime);
         countDownTimer.start();
         chessBoard.addChess(msg.getX(),msg.getY(),msg.getColor());
-        if(!isEnd)
-            Toast.makeText(this, "轮到客官您了", Toast.LENGTH_SHORT).show();
-
+        if(!isEnd) {
+            showToast("轮到客官您了");
+        }
     }
 
     /**
@@ -378,7 +381,7 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
 
             @Override
             public void onFailed(String errorMsg) {
-                Toast.makeText(GobangActivitiy.this, "对不起，无法连接到对方，请重试", Toast.LENGTH_SHORT).show();
+                showToast("对不起，无法连接到对方，请重试");
             }
         });
 
