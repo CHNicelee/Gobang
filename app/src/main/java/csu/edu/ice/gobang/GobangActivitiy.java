@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -56,18 +57,19 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
 
     private boolean isEnd = false;
     private AlertDialog alertDialog;
-    private int totalTime = 3 * 10000;//倒计时
+    private int totalTime = 30 * 1000;//倒计时
     private boolean isWin = false;
 
 
-    private String[] lostImageUrls = {"http://img5.imgtn.bdimg.com/it/u=824535348,1848358469&fm=27&gp=0.jpg",
-            "http://img5.imgtn.bdimg.com/it/u=3506604075,4147732860&fm=27&gp=0.jpg",
-            "http://img0.imgtn.bdimg.com/it/u=1815751955,4088443349&fm=214&gp=0.jpg",
-            "http://easyread.ph.126.net/SJeUgZ_yqf9U8NbYcWWQAA==/7917045570429865351.jpg"};
+    //private String[] lostImageUrls = {"http://img5.imgtn.bdimg.com/it/u=824535348,1848358469&fm=27&gp=0.jpg",
+     //       "http://img5.imgtn.bdimg.com/it/u=3506604075,4147732860&fm=27&gp=0.jpg",
+    //        "http://img0.imgtn.bdimg.com/it/u=1815751955,4088443349&fm=214&gp=0.jpg",
+    //        "http://easyread.ph.126.net/SJeUgZ_yqf9U8NbYcWWQAA==/7917045570429865351.jpg"};
     private String[] winImageUrls = {"http://news.cnhubei.com/xw/yl/201609/W020160923555134408141.jpg",
             "http://img.mp.sohu.com/upload/20170629/98c68c5902294b718d5ba0f572f6fe85_th.png",
     "http://img.mp.sohu.com/upload/20170629/5d5ac4d21e1d4aceafc98beb09a991c6_th.png",
     "http://img.mp.sohu.com/upload/20170629/7e233d0b54eb4b5eac0b58d085491449_th.png"};
+    private String[] lostImageUrls = winImageUrls;
     //定时器
     CountDownTimer countDownTimer = new CountDownTimer(totalTime,1000) {
         @Override
@@ -76,6 +78,10 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
             if(myTurn){
                 if(millisUntilFinished/1000<=10){
                     tvMyTime.setTextColor(Color.RED);
+                    ScaleAnimation scaleAnimation = new ScaleAnimation(1,3,1,3, Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
+                    scaleAnimation.setDuration(1000);
+                    scaleAnimation.setFillAfter(false);
+                    tvMyTime.startAnimation(scaleAnimation);
                 }
                 tvMyTime.setText("00:"+millisUntilFinished/1000);
             }
@@ -299,7 +305,7 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
 //        String tip = "您的好友已经加入了房间，可以开始对战了";
 //        if(moveFirst)tip+="您是先手";
 //        else tip+="您是后手";
-
+        myTurn = moveFirst;
         ivFriendPic.setImageResource(R.drawable.btn_player);
         if(chessColor == ChessBoard.COLOR_WHITE) {
             ivMyChess.setImageResource(R.drawable.white_chess_2);
@@ -317,7 +323,7 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
         ivTop.setVisibility(View.VISIBLE);
         ivBottom.setVisibility(View.VISIBLE);
 
-        ScaleAnimation scaleAnimation = new ScaleAnimation(0,1.5f,0,1.5f);
+        ScaleAnimation scaleAnimation = new ScaleAnimation(0,1.5f,0,1.5f,Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
         scaleAnimation.setDuration(1000);
         scaleAnimation.setFillAfter(false);
         int res[] = new int[]{R.mipmap.three,R.mipmap.two,R.mipmap.one,R.mipmap.begin};
@@ -341,6 +347,7 @@ public class GobangActivitiy extends AppCompatActivity implements SocketUtil.Mes
                         }
                         ivBottom.setVisibility(View.GONE);
                         ivTop.setVisibility(View.GONE);
+                        countDownTimer.start();
                         return;
                     }
                     Picasso.with(GobangActivitiy.this).load(res[index]).into(ivTop);

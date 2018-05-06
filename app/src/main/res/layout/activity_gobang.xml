@@ -71,6 +71,7 @@
 
 
     <TextView
+        android:translationZ="10dp"
         android:gravity="center"
         android:textColor="#000"
         android:visibility="invisible"
@@ -80,7 +81,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
-        android:background="#fff"
+        android:background="#a7ffffff"
         android:text="00:30"
         app:layout_constraintBottom_toTopOf="@+id/ivMyChess"
         app:layout_constraintStart_toEndOf="@+id/tvUserId"
@@ -99,6 +100,7 @@
         app:layout_constraintStart_toStartOf="@+id/tvMyTime" />
 
     <TextView
+        android:translationZ="10dp"
         android:gravity="center"
         android:textColor="#000"
         android:id="@+id/tvFriendTime"
@@ -108,7 +110,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
-        android:background="#fff"
+        android:background="#a7ffffff"
         android:visibility="invisible"
         android:text="00:30"
         app:layout_constraintBottom_toTopOf="@+id/ivFriendChess"
