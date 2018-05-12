@@ -29,7 +29,7 @@ public class GobangSoloActivity extends BaseActivity {
         initView();
 
         chessBoard.setCanLuoZi(true);
-
+        chessBoard.setNeedShowSequence(false);
         Button btnsolo = (Button)findViewById(R.id.btnsoloConfirm);
         Button btnsoloHuiqi = (Button)findViewById(R.id.btnsoloHuiqi);
         chessBoard.setOnChessDownListener((x, y) -> btnsolo.setEnabled(true));

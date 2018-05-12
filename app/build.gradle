@@ -37,4 +37,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:26.1.0'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.37'
     compile 'com.github.pinguo-zhouwei:CustomPopwindow:2.1.1'
+
+    compile 'com.aliyun.ams:alicloud-android-hotfix:3.2.2'
 }

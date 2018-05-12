@@ -3,16 +3,30 @@
     package="csu.edu.ice.gobang">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 外部存储读权限，调试工具加载本地补丁需要 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.taobao.android.hotfix.IDSECRET"
+            android:value="24887471" />
+        <meta-data
+            android:name="com.taobao.android.hotfix.APPSECRET"
+            android:value="71e5176500feba937d0e02a562c54957" />
+        <meta-data
+            android:name="com.taobao.android.hotfix.RSASECRET"
+            android:value="MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCiYZIzz2uZYtgTJ/s2E1uypeNozCn47gzIjw5IchJ1LO8eiZlCjdjgCS7BQkgf5n64J9/b5DH5ooPPdOSOz2FG8qWs/nUVn7qzPG93KzMIpzivtAxYxK5NH0E0uME1WG7GdmvV0dyphcy59idpgkC7oPQsdoPb0x/4jGACgpAstrevhskniOlTDefKrhWUmIBqtZCK95YfB9y9p/kw8KpQdASV7HsoJ5hNt02XBGM99JV+QX9H8t91w7xnBIAfvFtiO7g4nNjwsuflUykJ/WFxnU4DkIH7sLjO0mWaPoQ8GoIdEf61NBDXTkBHIj+0zr7JOo/qDkNzLMLQUA+ovSuBAgMBAAECggEAIfoKjn67Q/gTwEZgYRtB16qwX9BAhA7Da//K/EuqIwyI6DngcLWfiJlDSDrnPo2LPFtTkv43msVvkSwjWuJ3t1G0avM/aovmk/R0WloWrpvW16Tz5GsbEZYVncN+4fukCjDjNXVZF7ugb9TawE/53Yi7LsaJpqiRiv9MY5oQMtqewvhw+MsQNy7K2Kpm2D2/BGSfZrPiMK9LgPxaMCcWjrQoPLmvHon4zG7wRjbG8Li+S4TOjJXhdJ3tBAR0N5PoYc1Vmzm4pySc6R05tjlyvymNSzPnAu9HLJMLp/U82iBJSP4LfpDJLhS6SvgzZ+tjC5YjX2b/35YBuy40mKeAAQKBgQDlH0fUQv1gWtfK1XRMJxmwIpvxfOdweZg0j/3R8jiRgrVNKNLuI5dHl+Orpygm/2KaKMrfXTNA6hptGM4Rnik6BImJvFuynqmPrhusJQ0CLizx80q0Xr8OpnGGUsQS4jnOVAFG94iQnchbSj1Nr8hTjkqw+h88oM9nkfYOt+XFAQKBgQC1bgEXLqhzxr1r15Nd9dakyBjz/Xrusckcy3PrFf+HFPhnLD9IWen99tqLm09hFii105EO0ZgY9re1wkPxdumowTj/TMGEGC2ZAAyNwxvZ9aRcf11gnHjNpi5Gxt+hD45itAnbesHQe5LX6C6MRkZqNDaDTXSc2U/CiExhQPbmgQKBgESvEdtBka8WzGWTg19owTyZw2Gq7b471TK8j3wmPmrwYeUVfdXBeZIOqENGwrSeDjLkU5yN1dV52B4oN230mas4vPo7Ksnq4i2eJdF+8d1bdkG5iwVy+Zcssg9wNDLs+iMt74wUnC2t/ufO432sWkMh/qX69O45zrLfgIF9AzYBAoGANi3yj2y0i1Z3LKRE8tM+VRkYMoyo0G0xJLMxG6wHEdzWTWEuSLnpIZk9LGGl89U9NQdIE0fOBu5ucA3iYlJjdqy1C7BtPbhGraERHqh8QbuUaLb0OKyherA8s5AiKiPOHnWrV+qxxEOS130ToXo+/uo2uUFBKLHQmsQ/Iu/Wi4ECgYA/rcY+mbhjwbRuYefeHV3HO/okx2YoRXCzqd5q5yKwd2m2jY78pTY9MYM+jtmnsCnEMxqwTsKKJOJ9kJzyJK6Cd313oHq/WT3mR9bpapkyEx+HvH/P6tXfY0oWXwksjI5FyOvRQXnY83aywQ/5QKIFAH8psbYJ5H3NWkADJobaxw==" />
+
         <activity android:name=".activity.MainActivity" />
-        <activity android:name=".GameActivity" />
         <activity android:name=".activity.GobangActivitiy" />
         <activity android:name=".activity.ChooseActivity">
             <intent-filter>

@@ -47,6 +47,8 @@ public class GobangActivitiy extends BaseActivity implements SocketUtil.MessageH
     private static final String TAG = "GobangActivity";
     private static final long MESSAGE_TIME = 3000;
     private static String ip = "www.ice97.cn";
+//    private static String ip = "192.168.191.1";
+
     private static int port = 8885;
     private SocketUtil socketUtil;
     private int userId;
