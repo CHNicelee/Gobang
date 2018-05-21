@@ -19,7 +19,7 @@ public class MyApplication extends Application {
 
 
         SophixManager.getInstance().setContext(this)
-                .setAppVersion("1.0")
+                .setAppVersion("1.1")
                 .setAesKey(null)
                 .setEnableDebug(true)
                 .setPatchLoadStatusStub(new PatchLoadStatusListener() {
@@ -36,7 +36,13 @@ public class MyApplication extends Application {
                         }
                     }
                 }).initialize();
-// queryAndLoadNewPatch不可放在attachBaseContext 中，否则无网络权限，建议放在后面任意时刻，如onCreate中
+
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        // queryAndLoadNewPatch不可放在attachBaseContext 中，否则无网络权限，建议放在后面任意时刻，如onCreate中
         SophixManager.getInstance().queryAndLoadNewPatch();
 
     }

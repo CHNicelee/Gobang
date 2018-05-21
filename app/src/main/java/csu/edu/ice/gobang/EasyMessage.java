@@ -12,6 +12,7 @@ public class EasyMessage {
     public static final String type_user_message = "USER_MESSAGE";
     public static String type_reconnect = "RECONNECT";
     public static String type_keep_alive = "KEEP_ALIVE";
+    public static final String type_connect = "CONNECT";
     private String type;
     private Integer fromKey;
     private Integer toKey;

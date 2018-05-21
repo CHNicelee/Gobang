@@ -65,7 +65,7 @@ public class SocketUtil {
             startListening();//开始监听服务器的消息
             OutputStream os = socket.getOutputStream();
             Writer writer = new OutputStreamWriter(os, "UTF-8");
-            writer.write(converter.toJson(easyMessage) + "\n");
+            writer.write(converter.toJson(easyMessage) + "\r\n");
             writer.flush();
             e.onNext("SUCCESS");
         }).subscribeOn(Schedulers.io())
@@ -94,7 +94,7 @@ public class SocketUtil {
                     .observeOn(AndroidSchedulers.mainThread())
                     .map(s -> {
                         Log.d(TAG, "receiveMsg: "+s);
-                        s = s.replaceAll("\n", EasyMessage.replaceStr);
+                        s = s.replaceAll("\r\n", EasyMessage.replaceStr);
                         return converter.toEasyMessage(s);
                     })
                     .filter(easyMessage -> easyMessage!=null)
@@ -125,11 +125,11 @@ public class SocketUtil {
         if(easyMessage.getType() ==null)easyMessage.setType(EasyMessage.type_user_message);
         Observable.create((ObservableOnSubscribe<String>) e -> {
             String json = converter.toJson(easyMessage);
-            json = json.replaceAll("\n", EasyMessage.replaceStr);
+            json = json.replaceAll("\r\n", EasyMessage.replaceStr);
             OutputStream os = socket.getOutputStream();
             Writer writer = new OutputStreamWriter(os, "UTF-8");
             Log.d(TAG, "sendMessage: "+json);
-            writer.write(json + "\n");
+            writer.write(json + "\r\n");
             writer.flush();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

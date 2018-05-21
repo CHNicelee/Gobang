@@ -48,6 +48,7 @@ public class GobangActivitiy extends BaseActivity implements SocketUtil.MessageH
     private static final long MESSAGE_TIME = 3000;
     private static String ip = "www.ice97.cn";
 //    private static String ip = "192.168.191.1";
+//    private static String ip = "192.168.31.47";
 
     private static int port = 8885;
     private SocketUtil socketUtil;
@@ -58,13 +59,14 @@ public class GobangActivitiy extends BaseActivity implements SocketUtil.MessageH
     private TextView tvFriend,tvUserId;
     private TextView tvRoom,tvRoomTip,tvMyMessage,tvFriendMessage;
     private ImageView ivFriendPic,ivMyChess,ivFriendChess,ivTop,ivBottom,ivMessage;
-    private TextView tvMyTime,tvFriendTime;
+    private TextView tvMyTime,tvFriendTime,tvWhoLuozi;
 
     private boolean isEnd = false;
     private AlertDialog alertDialog;
     private int totalTime = 30 * 1000;//倒计时
     private boolean isWin = false;
 
+    private Animation myTurnAnim;
 
     //private String[] lostImageUrls = {"http://img5.imgtn.bdimg.com/it/u=824535348,1848358469&fm=27&gp=0.jpg",
      //       "http://img5.imgtn.bdimg.com/it/u=3506604075,4147732860&fm=27&gp=0.jpg",
@@ -128,6 +130,8 @@ public class GobangActivitiy extends BaseActivity implements SocketUtil.MessageH
             chessBoard.setCanLuoZi(false);
             sendMoveMessage(result[0],result[1]);
             myTurn = false;
+            tvWhoLuozi.clearAnimation();
+            tvWhoLuozi.setText("对方落子");
         });
         chessBoard.setOnWinListener(winColor -> {
             countDownTimer.cancel();
@@ -169,6 +173,7 @@ public class GobangActivitiy extends BaseActivity implements SocketUtil.MessageH
         tvUserId = findViewById(R.id.tvUserId);
         ivTop = findViewById(R.id.ivTop);
         ivBottom = findViewById(R.id.ivBottom);
+        tvWhoLuozi = findViewById(R.id.tvWhoLuoZi);
     }
 
     private void initSocket() {
@@ -182,7 +187,7 @@ public class GobangActivitiy extends BaseActivity implements SocketUtil.MessageH
         socketUtil.setDataClass(MsgBean.class);
         MsgBean msgBean = new MsgBean();
         msgBean.setRoom(room);
-        EasyMessage easyMessage = new EasyMessage(userId,null,msgBean);
+        EasyMessage easyMessage = new EasyMessage(EasyMessage.type_connect,userId,null,msgBean);
         socketUtil.connect(ip, port, easyMessage, new SocketUtil.Callback() {
             @Override
             public void onSuccess() {
@@ -285,13 +290,28 @@ public class GobangActivitiy extends BaseActivity implements SocketUtil.MessageH
     private void onFriendLuoZi(MsgBean msg) {
         chessBoard.setCanLuoZi(true);
         countDownTimer.cancel();
-        myTurn = true;
         resetTime(tvFriendTime);
         countDownTimer.start();
         chessBoard.addChess(msg.getX(),msg.getY(),msg.getColor());
         if(!isEnd) {
-            showToast("轮到客官您了");
+//            showToast("轮到客官您了");
+            onMyTurn();
         }
+    }
+
+
+
+    private void onMyTurn() {
+        if (myTurnAnim == null) {
+            myTurnAnim = new ScaleAnimation(1f,1.2f,1f,1.2f,ScaleAnimation.RELATIVE_TO_SELF,0.5f,ScaleAnimation.RELATIVE_TO_SELF,0.5f);
+            myTurnAnim.setRepeatCount(-1);
+            myTurnAnim.setRepeatMode(Animation.REVERSE);
+            myTurnAnim.setDuration(1000);
+        }
+        tvWhoLuozi.setText("我方落子");
+        tvWhoLuozi.startAnimation(myTurnAnim);
+        myTurn = true;
+
     }
 
     /**
@@ -347,8 +367,12 @@ public class GobangActivitiy extends BaseActivity implements SocketUtil.MessageH
                     if(index == 4) {
                         //开始比赛
                         //开始比赛
+                        tvWhoLuozi.setVisibility(View.VISIBLE);
                         if(moveFirst){
                             chessBoard.setCanLuoZi(true);
+                            onMyTurn();
+                        }else{
+                            tvWhoLuozi.setText("对方落子");
                         }
                         ivBottom.setVisibility(View.GONE);
                         ivTop.setVisibility(View.GONE);
@@ -465,17 +489,8 @@ public class GobangActivitiy extends BaseActivity implements SocketUtil.MessageH
             MsgBean msgBean = new MsgBean();
             msgBean.setType(MsgBean.type_friendMessage);
             msgBean.setMessage(messages[position]);
-            socketUtil.sendMessage(new EasyMessage(userId, friendId, msgBean), new SocketUtil.Callback() {
-                @Override
-                public void onSuccess() {
-                    showSendToFriendMessage(msgBean.getMessage());
-                }
-
-                @Override
-                public void onFailed(String errorMsg) {
-
-                }
-            });
+            socketUtil.sendMessage(new EasyMessage(userId, friendId, msgBean),null);
+            showSendToFriendMessage(msgBean.getMessage());
         });
     }
 
@@ -537,17 +552,8 @@ public class GobangActivitiy extends BaseActivity implements SocketUtil.MessageH
     public void sendDisconnectMessage(){
         MsgBean msgBean = new MsgBean();
         msgBean.setType(MsgBean.type_disconnect);
-        socketUtil.sendMessage(new EasyMessage(userId, friendId, msgBean), new SocketUtil.Callback() {
-            @Override
-            public void onSuccess() {
-                socketUtil.closeSocket();
-            }
-
-            @Override
-            public void onFailed(String errorMsg) {
-                socketUtil.closeSocket();
-            }
-        });
+        socketUtil.sendMessage(new EasyMessage(userId, friendId, msgBean),null);
+        socketUtil.closeSocket();
     }
 
 
