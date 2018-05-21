@@ -621,6 +621,7 @@ public class ChessBoard extends View {
 
     public void setNeedShowSequence(boolean needShowSequence) {
         this.needShowSequence = needShowSequence;
+        invalidate();
     }
 
     public void setNeedShowNewestCircle(boolean needShowNewestCircle) {
